@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Collections;
 using System.Linq;
+using System.Diagnostics;
+using System.ComponentModel;
 using InfinityScript;
 using static InfinityScript.GSCFunctions;
 
@@ -140,31 +142,31 @@ public class br : BaseScript
     private static string[] US_lastAliveDialogue = new string[1] { "US_1mc_lastalive" };
     private static string[] US_killDialogue = new string[5] { "US_1mc_forward", "US_1mc_kill_confirmed", "US_1mc_tied", "US_1mc_winning", "US_1mc_keepfighting" };
 
-    private static IntPtr acrDamageLoc = new IntPtr(0x22883520);
-    private static IntPtr type95DamageLoc = new IntPtr(0x228803BC);
-    private static IntPtr ak47DamageLoc = new IntPtr(0x228856FC);
-    private static IntPtr mk14DamageLoc = new IntPtr(0x2288BE64);
-    private static IntPtr g18DamageLoc = new IntPtr(0x228905C4);
-    private static IntPtr spasDamageLoc = new IntPtr(0x2289B1D0);
-    private static IntPtr strikerDamageLoc = new IntPtr(0x2289C768);
-    private static IntPtr usasDamageLoc = new IntPtr(0x2289D7F0);
-    private static IntPtr handsDamageLoc = new IntPtr(0x12E6AD74);
-    private static IntPtr uspDamageLoc = new IntPtr(0x14514EEC);
-    private static IntPtr magnumDamageLoc = new IntPtr(0x145C88C4);
-    private static IntPtr deagleDamageLoc = new IntPtr(0x144C9644);
-    private static IntPtr scarDamageLoc = new IntPtr(0x13661588);
-    private static IntPtr pm9DamageLoc = new IntPtr(0x13A9F9D4);
-    private static IntPtr p90DamageLoc = new IntPtr(0x13AFB6A8);
-    private static IntPtr pp90DamageLoc = new IntPtr(0x13B8CF38);
-    private static IntPtr umpDamageLoc = new IntPtr(0x13A38384);
-    private static IntPtr skorpionDamageLoc = new IntPtr(0x146CC3F8);
-    private static IntPtr aa12DamageLoc = new IntPtr(0x14335A70);
-    private static IntPtr modelDamageLoc = new IntPtr(0x143923C4);
-    private static IntPtr l86DamageLoc = new IntPtr(0x13EA9DA4);
-    private static IntPtr mg36DamageLoc = new IntPtr(0x13F15DA4);
-    private static IntPtr msrDamageLoc = new IntPtr(0x13FC81C4);
-    private static IntPtr l96DamageLoc = new IntPtr(0x14131008);
-    private static IntPtr dragunovDamageLoc = new IntPtr(0x13F7D8EC);
+    private static IntPtr acrDamageLoc = new IntPtr(0);// = new IntPtr(0x22883520);
+    private static IntPtr type95DamageLoc = new IntPtr(0);// = new IntPtr(0x228803BC);
+    private static IntPtr ak47DamageLoc = new IntPtr(0);// = new IntPtr(0x228856FC);
+    private static IntPtr mk14DamageLoc = new IntPtr(0);// = new IntPtr(0x2288BE64);
+    private static IntPtr g18DamageLoc = new IntPtr(0);// = new IntPtr(0x228905C4);
+    private static IntPtr spasDamageLoc = new IntPtr(0);// = new IntPtr(0x2289B1D0);
+    private static IntPtr strikerDamageLoc = new IntPtr(0);// = new IntPtr(0x2289C768);
+    private static IntPtr usasDamageLoc = new IntPtr(0);// = new IntPtr(0x2289D7F0);
+    private static IntPtr handsDamageLoc = new IntPtr(0);// = new IntPtr(0x12E6AD74);
+    private static IntPtr uspDamageLoc = new IntPtr(0);// = new IntPtr(0x14514EEC);
+    private static IntPtr magnumDamageLoc = new IntPtr(0);// = new IntPtr(0x145C88C4);
+    private static IntPtr deagleDamageLoc = new IntPtr(0);// = new IntPtr(0x144C9644);
+    private static IntPtr scarDamageLoc = new IntPtr(0);// = new IntPtr(0x13661588);
+    private static IntPtr pm9DamageLoc = new IntPtr(0);// = new IntPtr(0x13A9F9D4);
+    private static IntPtr p90DamageLoc = new IntPtr(0);// = new IntPtr(0x13AFB6A8);
+    private static IntPtr pp90DamageLoc = new IntPtr(0);// = new IntPtr(0x13B8CF38);
+    private static IntPtr umpDamageLoc = new IntPtr(0);// = new IntPtr(0x13A38384);
+    private static IntPtr skorpionDamageLoc = new IntPtr(0);// = new IntPtr(0x146CC3F8);
+    private static IntPtr aa12DamageLoc = new IntPtr(0);// = new IntPtr(0x14335A70);
+    private static IntPtr modelDamageLoc = new IntPtr(0);// = new IntPtr(0x143923C4);
+    private static IntPtr l86DamageLoc = new IntPtr(0);// = new IntPtr(0x13EA9DA4);
+    private static IntPtr mg36DamageLoc = new IntPtr(0);// = new IntPtr(0x13F15DA4);
+    private static IntPtr msrDamageLoc = new IntPtr(0);// = new IntPtr(0x13FC81C4);
+    private static IntPtr l96DamageLoc = new IntPtr(0);// = new IntPtr(0x14131008);
+    private static IntPtr dragunovDamageLoc = new IntPtr(0);// = new IntPtr(0x13F7D8EC);
 
     private static readonly string pauseMenu = "class";
 
@@ -322,6 +324,7 @@ public class br : BaseScript
 
         precacheGametype();
         SetDvarIfUninitialized("scr_damagePatches", 0);
+        /*
         if (Marshal.ReadInt32(acrDamageLoc) != 45 && GetDvarInt("scr_damagePatches") != 1)
         {
             //Using alt patch data
@@ -340,11 +343,13 @@ public class br : BaseScript
             umpDamageLoc = new IntPtr(0x22778BE0);
             dragunovDamageLoc = new IntPtr(0x2288FD2C);
         }
+        */
 
         //Utilities.SetDropItemEnabled(false);//Crashes game on death
         //Marshal.WriteInt32(new IntPtr(0x05866E04), 0);//Patch dvar below to accept 0 as a value
         //SetDvar("g_maxDroppedWeapons", 0);//Fix for above crash, but also crashes
-        AfterDelay(50, () => patchDamages());
+        //AfterDelay(50, () => patchDamages());
+        AfterDelay(50, memoryScanning.searchWeaponPatchPtrs);
 
         MakeDvarServerInfo("ui_gametype", "Battle Royale");
         MakeDvarServerInfo("sv_gametypeName", "Battle Royale");
@@ -515,32 +520,60 @@ public class br : BaseScript
     private static void patchDamages()
     {
         if (GetDvarInt("scr_damagePatches") == 1) return;
+        //Utilities.PrintToConsole("Patching data");
+
+        IntPtr nullPtr = new IntPtr(0);
         //These are all base damages, tiers add in onPlayerDamage(take away bonus compensation)
-        Marshal.WriteInt32(handsDamageLoc, 5);//Patch hands damage
-        Marshal.WriteInt32(uspDamageLoc, 10);//USP damage
-        Marshal.WriteInt32(magnumDamageLoc, 25);//44mag damage
-        Marshal.WriteInt32(deagleDamageLoc, 20);//deagle damage
-        Marshal.WriteInt32(acrDamageLoc, 10);//acr damage
-        Marshal.WriteInt32(type95DamageLoc, 15);//type95 damage
-        Marshal.WriteInt32(ak47DamageLoc, 15);//ak47 damage
-        Marshal.WriteInt32(mk14DamageLoc, 20);//mk14 damage
-        Marshal.WriteInt32(scarDamageLoc, 15);//scar damage
-        Marshal.WriteInt32(pm9DamageLoc, 10);//pm9 damage
-        Marshal.WriteInt32(p90DamageLoc, 10);//p90 damage
-        Marshal.WriteInt32(pp90DamageLoc, 10);//pp90 damage
-        Marshal.WriteInt32(umpDamageLoc, 12);//ump damage
-        Marshal.WriteInt32(g18DamageLoc, 10);//g18 damage
-        Marshal.WriteInt32(skorpionDamageLoc, 10);//skorpion damage
-        Marshal.WriteInt32(spasDamageLoc, 15);//spas12 damage
-        Marshal.WriteInt32(aa12DamageLoc, 3);//aa12 damage
-        Marshal.WriteInt32(strikerDamageLoc, 10);//striker damage
-        Marshal.WriteInt32(modelDamageLoc, 15);//1887 damage
-        Marshal.WriteInt32(usasDamageLoc, 8);//usas12 damage
-        Marshal.WriteInt32(l86DamageLoc, 5);//l86 damage
-        Marshal.WriteInt32(mg36DamageLoc, 5);//mg36 damage
-        Marshal.WriteInt32(msrDamageLoc, 80);//msr damage
-        Marshal.WriteInt32(l96DamageLoc, 85);//l96a1 damage
-        Marshal.WriteInt32(dragunovDamageLoc, 40);//dragunov damage
+        if (handsDamageLoc != nullPtr) Marshal.WriteInt32(handsDamageLoc, 25);//Patch hands damage
+        //else Utilities.PrintToConsole("Null address: hands");
+        if (uspDamageLoc != nullPtr) Marshal.WriteInt32(uspDamageLoc, 10);//USP damage
+        //else Utilities.PrintToConsole("Null address: usp");
+        if (magnumDamageLoc != nullPtr) Marshal.WriteInt32(magnumDamageLoc, 25);//44mag damage
+        //else Utilities.PrintToConsole("Null address: magnum");
+        if (deagleDamageLoc != nullPtr) Marshal.WriteInt32(deagleDamageLoc, 20);//deagle damage
+        //else Utilities.PrintToConsole("Null address: deagle");
+        if (acrDamageLoc != nullPtr) Marshal.WriteInt32(acrDamageLoc, 10);//acr damage
+        //else Utilities.PrintToConsole("Null address: acr");
+        if (type95DamageLoc != nullPtr) Marshal.WriteInt32(type95DamageLoc, 15);//type95 damage
+        //else Utilities.PrintToConsole("Null address: type95");
+        if (ak47DamageLoc != nullPtr) Marshal.WriteInt32(ak47DamageLoc, 15);//ak47 damage
+        //else Utilities.PrintToConsole("Null address: ak47");
+        if (mk14DamageLoc != nullPtr) Marshal.WriteInt32(mk14DamageLoc, 20);//mk14 damage
+        //else Utilities.PrintToConsole("Null address: mk14");
+        if (scarDamageLoc != nullPtr) Marshal.WriteInt32(scarDamageLoc, 15);//scar damage
+        //else Utilities.PrintToConsole("Null address: scar");
+        if (pm9DamageLoc != nullPtr) Marshal.WriteInt32(pm9DamageLoc, 10);//pm9 damage
+        //else Utilities.PrintToConsole("Null address: pm9");
+        if (p90DamageLoc != nullPtr) Marshal.WriteInt32(p90DamageLoc, 10);//p90 damage
+        //else Utilities.PrintToConsole("Null address: p90");
+        if (pp90DamageLoc != nullPtr) Marshal.WriteInt32(pp90DamageLoc, 10);//pp90 damage
+        //else Utilities.PrintToConsole("Null address: pp90");
+        if (umpDamageLoc != nullPtr) Marshal.WriteInt32(umpDamageLoc, 12);//ump damage
+        //else Utilities.PrintToConsole("Null address: ump");
+        if (g18DamageLoc != nullPtr) Marshal.WriteInt32(g18DamageLoc, 10);//g18 damage
+        //else Utilities.PrintToConsole("Null address: g18");
+        if (skorpionDamageLoc != nullPtr) Marshal.WriteInt32(skorpionDamageLoc, 10);//skorpion damage
+        //else Utilities.PrintToConsole("Null address: skorpion");
+        if (spasDamageLoc != nullPtr) Marshal.WriteInt32(spasDamageLoc, 15);//spas12 damage
+        //else Utilities.PrintToConsole("Null address: spas");
+        if (aa12DamageLoc != nullPtr) Marshal.WriteInt32(aa12DamageLoc, 3);//aa12 damage
+        //else Utilities.PrintToConsole("Null address: aa12");
+        if (strikerDamageLoc != nullPtr) Marshal.WriteInt32(strikerDamageLoc, 10);//striker damage
+        //else Utilities.PrintToConsole("Null address: striker");
+        if (modelDamageLoc != nullPtr) Marshal.WriteInt32(modelDamageLoc, 15);//1887 damage
+        //else Utilities.PrintToConsole("Null address: model");
+        if (usasDamageLoc != nullPtr) Marshal.WriteInt32(usasDamageLoc, 8);//usas12 damage
+        //else Utilities.PrintToConsole("Null address: usas");
+        if (l86DamageLoc != nullPtr) Marshal.WriteInt32(l86DamageLoc, 5);//l86 damage
+        //else Utilities.PrintToConsole("Null address: l86");
+        if (mg36DamageLoc != nullPtr) Marshal.WriteInt32(mg36DamageLoc, 5);//mg36 damage
+        //else Utilities.PrintToConsole("Null address: mg36");
+        if (msrDamageLoc != nullPtr) Marshal.WriteInt32(msrDamageLoc, 80);//msr damage
+        //else Utilities.PrintToConsole("Null address: msr");
+        if (l96DamageLoc != nullPtr) Marshal.WriteInt32(l96DamageLoc, 85);//l96a1 damage
+        //else Utilities.PrintToConsole("Null address: l96");
+        if (dragunovDamageLoc != nullPtr) Marshal.WriteInt32(dragunovDamageLoc, 40);//dragunov damage
+        //else Utilities.PrintToConsole("Null address: dragunov");
 
         //Patch melee damage of weapons
         Marshal.WriteInt32(uspDamageLoc + 0x08, 25);
@@ -568,6 +601,8 @@ public class br : BaseScript
         Marshal.WriteInt32(l96DamageLoc + 0x08, 25);
         Marshal.WriteInt32(dragunovDamageLoc + 0x08, 25);
         SetDvar("scr_damagePatches", 1);
+
+        //Utilities.PrintToConsole("Data patched");
     }
 
     private static IEnumerator playModeDialogue()
@@ -701,13 +736,6 @@ public class br : BaseScript
         updatePlayersAliveCount(true);
 
         player.SpawnedPlayer += () => onPlayerSpawn(player);
-
-        if (checkPlayerDev(player))
-        {
-            player.StatusIcon = "cardicon_iwlogo";
-            player.Name = "^2Slvr99^7";
-            player.SetField("isDev", true);
-        }
 
         createStartSequenceForPlayer(player);
     }
@@ -3268,22 +3296,6 @@ public class br : BaseScript
 
         player.SetField("attachmentsList", new Parameter(newList));
     }
-    private static bool checkPlayerDev(Entity player)
-    {
-        if (player.Name != "Slvr99") return false;
-
-        string check1 = (string)player.GetPlayerData("cardNameplate");
-        int check2 = (int)player.GetPlayerData("pastTitleData", "prestigemw2");
-        int check3 = (int)player.GetPlayerData("pastTitleData", "rankmw2");
-        int check4 = (int)player.GetPlayerData("teamkills");
-
-        if (check1 != "cardnameplate_test") return slvrImposter(player);
-        if (check2 != 10) return slvrImposter(player);
-        if (check3 != 42) return slvrImposter(player);
-        if (check4 != 99) return slvrImposter(player);
-
-        return true;
-    }
     private static bool slvrImposter(Entity player)
     {
         Utilities.ExecuteCommand("kickclient " + player.EntRef + " Please do not impersonate the developer.");
@@ -4028,4 +4040,254 @@ public class br : BaseScript
         weaponModel.SetField("ammo", WeaponClipSize(weapon));
         usables.Add(weaponModel);
     }
+
+    #region memory scanning
+    public class memoryScanning
+    {
+        //[DllImport("kernel32.dll")]
+        //private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, IntPtr buffer, uint size, int lpNumberOfBytesRead);
+        //[DllImport("kernel32.dll")]
+        //private static extern bool WriteProcessMemory(IntPtr hProcess, int lpBaseAddress, [In, Out] byte[] buffer, uint size, out int lpNumberOfBytesWritten);
+        [DllImport("kernel32.dll")]
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] buffer, uint size, int lpNumberOfBytesRead);
+        [DllImport("kernel32.dll")]
+        private static extern int VirtualQuery(IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+        //[DllImport("kernel32.dll")]
+        //private static extern bool VirtualProtect(IntPtr lpAddress, uint dwSize, uint flNewProtect, out uint lpflOldProtect);
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MEMORY_BASIC_INFORMATION
+        {
+            public IntPtr BaseAddress;
+            public IntPtr AllocationBase;
+            public uint AllocationProtect;
+            public IntPtr RegionSize;
+            public uint State;
+            public uint Protect;
+            public uint Type;
+        }
+        private static Dictionary<string, List<IntPtr>> weaponStructs = new Dictionary<string, List<IntPtr>>();
+        private static string[] weaponPatches = new string[] { "c4death_mp", "iw5_acr_mp", "iw5_type95_mp", "iw5_ak47_mp", "iw5_mk14_mp", "iw5_g18_mp", "iw5_spas12_mp", "iw5_striker_mp", "iw5_usas12_mp", "iw5_usp45_mp", "iw5_44magnum_mp", "iw5_deserteagle_mp", "iw5_scar_mp", "iw5_m9_mp", "iw5_p90_mp", "iw5_pp90m1_mp", "iw5_ump45_mp", "iw5_skorpion_mp", "iw5_aa12_mp", "iw5_1887_mp", "iw5_sa80_mp", "iw5_mg36_mp", "iw5_msr_mp", "iw5_l96a1_mp", "iw5_dragunov_mp" };
+
+        public static class Mem
+        {
+            public static string ReadString(int address, int maxlen = 0)
+            {
+                string ret = "";
+                maxlen = (maxlen == 0) ? int.MaxValue : maxlen;
+
+                byte[] buffer = new byte[maxlen];
+
+                ReadProcessMemory(Process.GetCurrentProcess().Handle, new IntPtr(address), buffer, (uint)maxlen, 0);
+
+                ret = Encoding.ASCII.GetString(buffer);
+
+                return ret;
+            }
+
+            public static void WriteString(IntPtr address, string str, bool endZero = true)
+            {
+                if (!canReadAndWriteMemory(address, 1024)) return;
+
+                byte[] strarr = Encoding.ASCII.GetBytes(str);
+
+                Marshal.Copy(strarr, 0, address, strarr.Length);
+                if (endZero) Marshal.WriteByte(address + str.Length, 0);
+            }
+            public static bool canReadMemory(IntPtr address, uint length)
+            {
+                MEMORY_BASIC_INFORMATION mem;
+                VirtualQuery(address, out mem, length);
+
+                if (mem.Protect == 0x40 || mem.Protect == 0x04 || mem.Protect == 0x02) return true;
+                return false;
+            }
+            public static bool canReadAndWriteMemory(IntPtr address, uint length)
+            {
+                MEMORY_BASIC_INFORMATION mem;
+                VirtualQuery(address, out mem, length);
+
+                if (/*mem.Protect == 0x40 || */mem.Protect == 0x04) return true;
+                return false;
+            }
+            public static IntPtr getProcessBaseAddress()
+                => Process.GetCurrentProcess().MainModule.BaseAddress;
+        }
+
+        public static void scanForWeaponStructs()
+        {
+            //Utilities.PrintToConsole("Searching for weapon structs...");
+
+            Process p = Process.GetCurrentProcess();
+            IntPtr currentAddr = new IntPtr(0x10000000);//Start the scan at 10 for now
+            byte[] buffer = new byte[2048];
+            string s = null;
+
+            for (; (int)currentAddr < 0x23000000; currentAddr += 2048)
+            {
+                if (!Mem.canReadMemory(currentAddr, 2048)) continue;
+
+                s = null;
+                ReadProcessMemory(p.Handle, currentAddr, buffer, 2048, 0);
+                s = Encoding.ASCII.GetString(buffer);
+
+                if (!string.IsNullOrEmpty(s))
+                {
+                    //Utilities.PrintToConsole("Address " + currentAddr.ToString("X"));
+                    for (int i = 0; i < weaponPatches.Length; i++)
+                    {
+                        if (s.Contains(weaponPatches[i]))
+                        {
+                            int offset = s.IndexOf(weaponPatches[i]);
+                            //if (Marshal.ReadInt16(currentAddr + offset + weaponPatches[i].Length) != 0x00) continue;//If the next two bytes aren't null, this isn't the right block
+
+                            weaponStructs[weaponPatches[i]].Add(currentAddr + offset);
+                            //Utilities.PrintToConsole("Address " + (currentAddr + offset).ToString("X") + " found for weapon struct " + weaponPatches[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void scanWeaponStructs(object sender, DoWorkEventArgs e)
+        {
+            scanForWeaponStructs();
+        }
+
+        public static void searchWeaponPatchPtrs()
+        {
+            if (GetDvarInt("scr_damagePatches") == 1) return;
+
+            //init structs dictionary
+            foreach (string weapon in weaponPatches)
+                weaponStructs.Add(weapon, new List<IntPtr>());
+
+            BackgroundWorker task = new BackgroundWorker();
+            task.DoWork += scanWeaponStructs;
+            task.RunWorkerAsync();
+
+            task.RunWorkerCompleted += new RunWorkerCompletedEventHandler(scanWeaponStructs_Completed);
+            task.RunWorkerCompleted += new RunWorkerCompletedEventHandler((s, e) => task.Dispose());
+        }
+        private static void scanWeaponStructs_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //Utilities.PrintToConsole("Searching for weapon structs complete.");
+            if (e.Cancelled)
+            {
+                Utilities.PrintToConsole("Weapon patch search was cancelled for an unknown reason! This may cause bugs to occur for certain weapons.");
+                return;
+            }
+            if (e.Error != null)
+            {
+                Utilities.PrintToConsole("There was an error finding weapon patch locations: " + e.Error.Message);
+                return;
+            }
+
+            setupWeaponPatches();
+        }
+
+        private static void setupWeaponPatches()
+        {
+            List<IntPtr> currentPtrs;
+            for (int i = 0; i < weaponPatches.Length; i++)
+            {
+                if (!weaponStructs.ContainsKey(weaponPatches[i]))
+                {
+                    Utilities.PrintToConsole(string.Format("Could not find weapon data for {0}!", weaponPatches[i]));
+                    continue;
+                }
+
+                currentPtrs = weaponStructs[weaponPatches[i]];
+                foreach (IntPtr ptr in currentPtrs)
+                {
+                    //Utilities.PrintToConsole("Setting weapon patches for " + weaponPatches[i]);
+
+                    switch (weaponPatches[i])
+                    {
+                        case "c4death_mp":
+                            if (Marshal.ReadInt32(ptr + 0x24C) == 135) handsDamageLoc = ptr + 0x24C;
+                            break;
+                        case "iw5_acr_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 45) acrDamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_type95_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 55) type95DamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_ak47_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 49) ak47DamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_mk14_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 75) mk14DamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_g18_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 42) g18DamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_spas12_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 30) spasDamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_striker_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 25) strikerDamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_usas12_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 25) usasDamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_usp45_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 40) uspDamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_44magnum_mp":
+                            if (Marshal.ReadInt32(ptr + 0x24B) == 49) magnumDamageLoc = ptr + 0x24B;
+                            break;
+                        case "iw5_deserteagle_mp":
+                            if (Marshal.ReadInt32(ptr + 0x24E) == 49) deagleDamageLoc = ptr + 0x24E;
+                            break;
+                        case "iw5_scar_mp":
+                            if (Marshal.ReadInt32(ptr + 0x246) == 35) scarDamageLoc = ptr + 0x246;
+                            break;
+                        case "iw5_m9_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 35) pm9DamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_p90_mp":
+                            if (Marshal.ReadInt32(ptr + 0x245) == 42) p90DamageLoc = ptr + 0x245;
+                            break;
+                        case "iw5_pp90m1_mp":
+                            if (Marshal.ReadInt32(ptr + 0x247) == 42) pp90DamageLoc = ptr + 0x247;
+                            break;
+                        case "iw5_ump45_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 49) umpDamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_skorpion_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 30) skorpionDamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_aa12_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 15) aa12DamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_1887_mp":
+                            if (Marshal.ReadInt32(ptr + 0x247) == 30) modelDamageLoc = ptr + 0x247;
+                            break;
+                        case "iw5_sa80_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 38) l86DamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_mg36_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 40) mg36DamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_msr_mp":
+                            if (Marshal.ReadInt32(ptr + 0x244) == 98) msrDamageLoc = ptr + 0x244;
+                            break;
+                        case "iw5_l96a1_mp":
+                            if (Marshal.ReadInt32(ptr + 0x248) == 98) l96DamageLoc = ptr + 0x248;
+                            break;
+                        case "iw5_dragunov_mp":
+                            if (Marshal.ReadInt32(ptr + 0x24B) == 70) dragunovDamageLoc = ptr + 0x24B;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    //Utilities.PrintToConsole("Setting " + weaponPatches[i] + "to " + ptr.ToString("X"));
+                }
+            }
+
+            AfterDelay(0, patchDamages);
+        }
+    }
+    #endregion
 }
